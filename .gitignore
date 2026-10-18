@@ -1,4 +1,17 @@
 .venv/
 __pycache__/
+*.pth
+
+# ignore contents, keep the folder structure
+data/images/*
+data/masks/*
+data/test/*
+outputs/*
+
+!data/images/.gitkeep
+!data/masks/.gitkeep
+!data/test/.gitkeep
+!outputs/.gitkeep.venv/
+__pycache__/
 outputs/
 *.pth
