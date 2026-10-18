@@ -11,7 +11,4 @@ outputs/*
 !data/images/.gitkeep
 !data/masks/.gitkeep
 !data/test/.gitkeep
-!outputs/.gitkeep.venv/
-__pycache__/
-outputs/
-*.pth
+!outputs/.gitkeep
