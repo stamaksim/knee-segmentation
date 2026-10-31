@@ -1,14 +1,18 @@
 .venv/
+.idea/
 __pycache__/
 *.pth
+*.zip
+csv_counts.png
+overlay_check.png
 
 # ignore contents, keep the folder structure
-data/images/*
+data/xrays/*
 data/masks/*
-data/test/*
+data/CSVs/*
 outputs/*
 
-!data/images/.gitkeep
+!data/xrays/.gitkeep
 !data/masks/.gitkeep
-!data/test/.gitkeep
+!data/CSVs/.gitkeep
 !outputs/.gitkeep
