@@ -1,4 +1,5 @@
 import os
+import warnings
 
 import numpy as np
 import pandas as pd
@@ -7,6 +8,9 @@ from PIL import Image
 from torch.utils.data import Dataset, DataLoader
 from torchvision import tv_tensors
 from torchvision.transforms import v2
+
+# masks are palette PNGs with transparency; PIL warns on convert("L") but the result is correct
+warnings.filterwarnings("ignore", message="Palette images with Transparency")
 
 
 def get_transforms(train):
