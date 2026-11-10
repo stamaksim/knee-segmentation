@@ -16,3 +16,6 @@ outputs/*
 !data/masks/.gitkeep
 !data/CSVs/.gitkeep
 !outputs/.gitkeep
+
+# course materials (instructor content, keep out of the public repo)
+course/

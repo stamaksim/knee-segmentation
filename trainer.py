@@ -6,7 +6,7 @@ import numpy as np
 import torch
 from tqdm import tqdm
 
-from utils import DiceBCELoss, batch_metrics, plot_history
+from utils import DiceBCELoss, dice_score_from_logits, iou_score_from_logits, plot_history
 
 
 class Trainer:
@@ -44,15 +44,16 @@ class Trainer:
     @torch.no_grad()
     def validate(self):
         self.model.eval()
-        losses, dices, ious = [], [], []
+        losses, dice_sum, iou_sum, n = [], 0.0, 0.0, 0
         for img, mask, _ in self.val_loader:
             img, mask = img.to(self.device), mask.to(self.device)
             logits = self.model(img)
             losses.append(self.criterion(logits, mask).item())
-            d, i = batch_metrics(logits, mask, self.args.threshold)
-            dices += d
-            ious += i
-        return float(np.mean(losses)), float(np.mean(dices)), float(np.mean(ious))
+            b = img.size(0)  # weight by batch size -> mean over all images
+            dice_sum += dice_score_from_logits(logits, mask) * b
+            iou_sum += iou_score_from_logits(logits, mask) * b
+            n += b
+        return float(np.mean(losses)), dice_sum / n, iou_sum / n
 
     def fit(self):
         best_dice, best_epoch, bad_epochs = -1.0, 0, 0

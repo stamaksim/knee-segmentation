@@ -14,18 +14,18 @@ Masks are palette PNGs; they are converted to grayscale and thresholded (`> 127`
 
 ## Approach
 - **Model** – classic U-Net (4 down / 4 up levels, 32→512 channels, BatchNorm, Dropout in the bottleneck), ~7.8M params, trained from scratch. Output: 1-channel logits.
-- **Loss** – BCE + Dice. BCE gives stable per-pixel gradients, Dice directly optimizes overlap and is robust to the foreground/background imbalance (~29% foreground).
+- **Loss** – BCE + soft Dice (`dice_loss_from_logits` from the course `utils.py`); the reported metric is hard Dice (`dice_score_from_logits`, threshold 0.5). BCE gives stable per-pixel gradients, Dice directly optimizes overlap and is robust to the foreground/background imbalance (~29% foreground).
 - **Augmentation** (train only, needed with only 80 images) – horizontal flip, small affine (±10°, ±5% shift, 0.9–1.1 scale) applied jointly to image and mask, brightness/contrast jitter on the image only.
 - **Optimization** – AdamW (lr 1e-3, wd 1e-4), batch 8, `ReduceLROnPlateau` on val Dice (halve LR after 5 bad epochs), early stopping (patience 20).
 - **Model selection** – the checkpoint with the highest **validation Dice** is saved to `outputs/<run_name>/best_model.pth`.
 - **Metrics** – Dice and IoU per image at threshold 0.5, averaged.
 - **Test set** has no ground truth, so quantitative evaluation is done on val; for test the model writes predicted masks to `outputs/main/test_predictions/` and an overlay figure.
 
-## Results (best model, epoch 93 of 100)
+## Results (best model, epoch 44; early stopping at epoch 64)
 | metric (val, 20 images) | value |
 |---|---|
-| Dice | 0.9704 ± 0.031 |
-| IoU  | 0.9442 ± 0.053 |
+| Dice | 0.9703 ± 0.030 |
+| IoU  | 0.9438 ± 0.051 |
 
 Figures: `outputs/main/training_curves.png`, `outputs/main/val_examples.png`, `outputs/main/test_examples.png`.
 

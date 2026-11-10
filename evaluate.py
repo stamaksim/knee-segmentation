@@ -9,7 +9,7 @@ from PIL import Image
 
 from dataset import get_loader
 from model import UNet
-from utils import batch_metrics, denorm, overlay
+from utils import dice_score_from_logits, iou_score_from_logits, denorm, overlay
 
 
 def load_model(path, device):
@@ -27,7 +27,9 @@ def evaluate_labeled(model, loader, device, threshold, save_path, n_show=6):
     dices, ious, examples = [], [], []
     for img, mask, names in loader:
         logits = model(img.to(device)).cpu()
-        d, i = batch_metrics(logits, mask, threshold)
+        # per-image scores with the course's Dice function
+        d = [dice_score_from_logits(logits[k:k + 1], mask[k:k + 1]) for k in range(len(names))]
+        i = [iou_score_from_logits(logits[k:k + 1], mask[k:k + 1]) for k in range(len(names))]
         dices += d
         ious += i
         pred = (torch.sigmoid(logits) > threshold).float()
