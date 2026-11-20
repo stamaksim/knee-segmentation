@@ -49,3 +49,9 @@ python main.py --mode eval --checkpoint outputs/main/best_model.pth
 - `evaluate.py` – val metrics, GT-vs-prediction figure, test mask prediction
 - `utils.py` – loss, metrics, plotting helpers
 - `main.py` – entry point
+
+## License
+
+- **Model:** U-Net (Ronneberger, Fischer, Brox, 2015, arXiv:1505.04597), implemented from scratch in PyTorch (`model.py`) and trained from scratch. No pretrained weights are used, so there are no third-party model-weight licenses.
+- **Libraries:** PyTorch (BSD-3-Clause), plus the packages listed in `requirements.txt`.
+- **Data:** the knee X-ray dataset is provided by the course (SAMK) and is not redistributed under any license by this project.
